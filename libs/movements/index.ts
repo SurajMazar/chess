@@ -1,0 +1,3 @@
+export {pawnMovementPositions} from './pawn'
+
+
