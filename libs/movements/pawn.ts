@@ -1,11 +1,9 @@
-import colors, { ColorInterface } from "@/constants/colors";
+import colors from "@/constants/colors";
 import defaultPiecesWithPositions, { PiecesListInterface } from "@/constants/defaultPieces";
-import { hasPiece, isValidPosition } from "@/utils/piece.util";
+import { getColumnFromPosition, hasPiece, isValidPosition } from "@/utils/piece.util";
 
 export const pawnMovementPositions = (
-    currentPosition:number,
-    id:number,
-    color:ColorInterface,
+    selectedPiece:PiecesListInterface,
     currentPiecesWithPositions:Array<PiecesListInterface>,
     reversed:boolean = false) => {
     
@@ -18,15 +16,23 @@ export const pawnMovementPositions = (
      * IS FIRST MOVE
      */
     const isFirstMove = () => {
-        const piece = defaultPiecesWithPositions.find(piece => piece.id === id)!
-        return piece?.index === currentPosition
+        const piece = defaultPiecesWithPositions.find(piece => piece.id === selectedPiece.id)!
+        return piece?.index === selectedPiece.index
     }
 
     /**
-     * 
+     * CHECK IF ROW DIFFERENCE IS VALID
+     * @param position 
+     */
+    const validColDifference = (position:number) => {
+        return Math.abs(getColumnFromPosition(selectedPiece.index)-getColumnFromPosition(position)) < 2
+    }
+
+    /**
+     * ADD AVAILABLE POSITIONS
      */
     const addPostion = (position:number, enemy:boolean = false) => {
-        if(isValidPosition(position)){
+        if(isValidPosition(position) && validColDifference(position)){
             if(!enemy){
                 const piece = hasPiece(position,currentPiecesWithPositions)
                 if(!piece){
@@ -34,7 +40,7 @@ export const pawnMovementPositions = (
                 }
             }else{
                 const piece = hasPiece(position,currentPiecesWithPositions)
-                if(piece && piece.color !== color){
+                if(piece && piece.color !== selectedPiece.color){
                     positions.push(position)
                 }
             }
@@ -45,26 +51,26 @@ export const pawnMovementPositions = (
     const calculatePosition = (type:'forward'|'backward')=>{
 
         if(type === "forward"){
-            addPostion(currentPosition - 8)
-            addPostion(currentPosition - 7,true)
-            addPostion(currentPosition - 9,true)
+            addPostion(selectedPiece.index - 8)
+            addPostion(selectedPiece.index - 7,true)
+            addPostion(selectedPiece.index - 9,true)
             if(isFirstMove()){
-                addPostion(currentPosition - 16)   
+                addPostion(selectedPiece.index - 16)   
             }
         }else{
-            addPostion(currentPosition + 8)
-            addPostion(currentPosition + 7,true)
-            addPostion(currentPosition + 9,true)
+            addPostion(selectedPiece.index + 8)
+            addPostion(selectedPiece.index + 7,true)
+            addPostion(selectedPiece.index + 9,true)
 
              if(isFirstMove()){
-                addPostion(currentPosition + 16)   
+                addPostion(selectedPiece.index + 16)   
             }
         }
 
     }
 
 
-    if(color === colors.black){
+    if(selectedPiece.color === colors.black){
 
         if(reversed){
             calculatePosition('forward')

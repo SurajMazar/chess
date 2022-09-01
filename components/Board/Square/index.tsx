@@ -6,7 +6,7 @@ import colors, { ColorInterface } from '@/constants/colors';
 const Square: React.FC<PropsWithChildren<{
     color:ColorInterface,
     selected?:boolean,
-    onClickHandler:()=>void
+    onClickHandler?:()=>void
 }>>  = (props) => {
 
     /**

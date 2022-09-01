@@ -2,50 +2,68 @@
 import colors from '@/constants/colors'
 import defaultPiecesWithPositions, { PiecesListInterface } from '@/constants/defaultPieces'
 import pieceTypes from '@/constants/pieceTypes'
+import useArrayObj from '@/hooks/UseArray'
 import useComputed from '@/hooks/UseComputed'
 import { pawnMovementPositions } from '@/libs/movements'
+import { getColor } from '@/utils/board.utils'
 import { getPieceByIndex } from '@/utils/piece.util'
-import React,{ PropsWithChildren, useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import Piece from '../Piece'
 import Square from './Square'
 
-const Board: React.FC<PropsWithChildren<{}>>  = (props) => {
+const Board: React.FC<PropsWithChildren<{}>> = (props) => {
 
     /**
      * COMPONENT PROPS
      */
-    const {children} = props
+    const { children } = props
 
     /**
-     * COMPOENENT STATE
+     * SELECTED PIECE
      */
-    const [selectedPiece, setSelectedPiece] = useState<PiecesListInterface|null>(null)
-
+    const [selectedPiece, setSelectedPiece] = useState<PiecesListInterface | null>(null)
 
     /**
      * DEFAULT PIECES LIST
      */
-    const [defaultList, setDefaultList] = useState(defaultPiecesWithPositions)
+    const { data: piecesList, replaceObject, filter, replaceObjects } = useArrayObj(defaultPiecesWithPositions)
+
+    /**
+     * NON TAKEN PIECES
+     */
+    const nonTakenPieces = filter((pieces) => {
+        return pieces.filter(piece => !piece.taken)
+    })
+
+    /**
+     * TAKEN WHITE PIECES
+     */
+    const TakenWhitePieces = filter((pieces) => {
+        return pieces.filter(piece => piece.taken && piece.color === colors.white)
+    })
+
+    /**
+     * TAKEN BLACK PIECES
+     */
+    const TakenBlackPieces = filter((pieces) => {
+        return pieces.filter(piece => piece.taken && piece.color === colors.black)
+    })
 
 
     /**
      * AVAILABLE POSITIONS FOR THE SELECTED PIECE TO BE ABLE TO MOVE
      */
-    const availablePositions = useComputed(selectedPiece,(selectedPiece)=>{
-        let positions:Array<number> = []
-        if(selectedPiece){
-            switch(selectedPiece.type){
+    const availablePositions = useComputed(selectedPiece, (selectedPiece) => {
+        let positions: Array<number> = []
+        if (selectedPiece) {
+            switch (selectedPiece.type) {
                 case pieceTypes.pawn:
-                    positions = pawnMovementPositions(
-                        selectedPiece.index,
-                        selectedPiece.id,
-                        selectedPiece.color,
-                        defaultList
-                    )
+                    positions = pawnMovementPositions(selectedPiece,nonTakenPieces)
             }
         }
         return positions
     }) || []
+
 
     /**
      * IS SELECTED?
@@ -53,7 +71,7 @@ const Board: React.FC<PropsWithChildren<{}>>  = (props) => {
      * @param piece 
      * @returns 
      */
-    const isSelected = (index:number) => {
+    const isSelected = (index: number) => {
         return (index === selectedPiece?.index) || availablePositions.includes(index)
     }
 
@@ -64,44 +82,49 @@ const Board: React.FC<PropsWithChildren<{}>>  = (props) => {
      * @param piece 
      * @returns 
      */
-    const handleSquareClick = (index:number, piece:PiecesListInterface | undefined) => {
-        if(availablePositions.includes(index)){
-
-            const updatedList = [...defaultList]
-
-            if(piece){
-                if(piece.color === selectedPiece?.color){
+    const handleSquareClick = (index: number, piece: PiecesListInterface | undefined) => {
+        if (availablePositions.includes(index)) {
+            /**
+             * IF THE AVAILABLE PATH HAS PIECE (ENEMY)
+             */
+            if (piece) {
+                
+                /**
+                 * DIFFERENT PIECE IS SELECTED IN CASE OF SAME COLOR
+                 */
+                if (piece.color === selectedPiece?.color) {
                     setSelectedPiece(piece)
                     return
                 }
 
                 if(selectedPiece){
-                    const updatedSelectedPiece = {...selectedPiece}
-                    const oldPieceIndex = updatedList.findIndex(item => item.index === selectedPiece.index);
-                    const opponentPiece = updatedList.findIndex(item => item.index === piece.index)!;
-                    if(!isNaN(oldPieceIndex)){
-                        updatedSelectedPiece.index = index
-                        piece.taken = true
-                        updatedList[opponentPiece] = piece
-                        updatedList[oldPieceIndex] = updatedSelectedPiece
-                        setDefaultList(updatedList)
-                        setSelectedPiece(null)
-                    }
+                    /**
+                     * TAKE OPPONENT PIECE AND UPDATE POSITION
+                     */
+                    replaceObjects([
+                        {
+                            ...piece,
+                            taken: true
+                        },
+                        {
+                            ...selectedPiece,
+                            index
+                        }
+                    ], 'id')
+                }
+            }else{
+                if(selectedPiece){
+                    /**
+                     * UPDATE THE ORIGINAL PIECE POSITION
+                     */
+                    replaceObject({
+                        ...selectedPiece,
+                        index
+                    }, 'id')
                 }
             }
-    
-            if(selectedPiece){
-                const updatedSelectedPiece = {...selectedPiece}
-                const oldPieceIndex = updatedList.findIndex(item => item.index === selectedPiece.index);
-                if(!isNaN(oldPieceIndex)){
-                    updatedSelectedPiece.index = index
-                    updatedList[oldPieceIndex] = updatedSelectedPiece
-                    setDefaultList(updatedList)
-                    setSelectedPiece(null)
-                }
-                return
-            }
-
+            
+            setSelectedPiece(null)
         }
     }
 
@@ -112,40 +135,31 @@ const Board: React.FC<PropsWithChildren<{}>>  = (props) => {
     return (
         <div className='chess-board'>
             {
-                Array.from(Array(64),(e,index) => {
-                    
-                    // GET COLOR OF THE SQUARE
-                    const getColor = () => {
-                        const row = Math.floor(index/8)+1;
-                        if(row%2 === 0){
-                            return index%2 === 0 ? colors.white : colors.black
-                        }else{
-                            return index%2 === 0 ? colors.black : colors.white
-                        }
-                    }
+                Array.from(Array(64), (e, index) => {
 
                     // GET PIECE FOR INDEX
-                    const piece = getPieceByIndex(defaultList,index)
+                    const piece = getPieceByIndex(nonTakenPieces, index)
 
                     return (
-                        
-                          <Square color={getColor()} selected={isSelected(index)}
-                            onClickHandler={()=>{
+
+                        <Square color={getColor(index)}
+                            selected={isSelected(index)}
+                            onClickHandler={() => {
                                 handleSquareClick(index, piece)
                             }}
                             key={index}
-                          >
+                        >
                             {
                                 piece && !piece.taken ?
-                                <Piece 
-                                    color={piece.color}
-                                    type={piece.type}
-                                    clickHandler={()=>{
-                                        setSelectedPiece(piece)
-                                    }}/>
-                                :""
+                                    <Piece
+                                        color={piece.color}
+                                        type={piece.type}
+                                        clickHandler={() => {
+                                            setSelectedPiece(piece)
+                                        }} />
+                                    : ""
                             }
-                          </Square>  
+                        </Square>
                     )
                 })
             }
