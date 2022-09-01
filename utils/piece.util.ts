@@ -35,7 +35,26 @@ export const getPieceByIndex = (array:Array<PiecesListInterface>,index:number) =
  * @param position 
  */
 export const isValidPosition = (position:number):boolean => {
-    return (position >= 0) && (position <= 63) 
+    return (position >= 0) && (position <= 63)
+}
+
+/**
+ * GET ROW OF THE BOARD FROM POSITION
+ * @param position 
+ * @returns 
+ */
+export const getRowFromPosition = (position:number )=>{
+    return Math.floor(position/8)+1;
+}
+
+/**
+ * GET COL FROM POSITION
+ * @param position 
+ * @returns 
+ */
+export const getColumnFromPosition = (position:number) => {
+    const row = getRowFromPosition(position)
+    return 8 - Math.abs(((position+1)-(8*row))) 
 }
 
 /**
