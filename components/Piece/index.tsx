@@ -7,7 +7,7 @@ import React,{ PropsWithChildren } from 'react'
 const Piece: React.FC<PropsWithChildren<{
     type:pieceTypeInterface,
     color:ColorInterface,
-    clickHandler:()=>void
+    clickHandler?:()=>void
 }>>  = (props) => {
 
     /**

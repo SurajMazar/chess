@@ -1,10 +1,9 @@
 
 import colors from '@/constants/colors'
 import defaultPiecesWithPositions, { PiecesListInterface } from '@/constants/defaultPieces'
-import pieceTypes from '@/constants/pieceTypes'
 import useArrayObj from '@/hooks/UseArray'
 import useComputed from '@/hooks/UseComputed'
-import { pawnMovementPositions } from '@/libs/movements'
+import { getMovingPositions } from '@/libs/movements'
 import { getColor } from '@/utils/board.utils'
 import { getPieceByIndex } from '@/utils/piece.util'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
@@ -26,7 +25,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
     /**
      * DEFAULT PIECES LIST
      */
-    const { data: piecesList, replaceObject, filter, replaceObjects } = useArrayObj(defaultPiecesWithPositions)
+    const { replaceObject, filter, replaceObjects } = useArrayObj(defaultPiecesWithPositions)
 
     /**
      * NON TAKEN PIECES
@@ -54,14 +53,9 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
      * AVAILABLE POSITIONS FOR THE SELECTED PIECE TO BE ABLE TO MOVE
      */
     const availablePositions = useComputed(selectedPiece, (selectedPiece) => {
-        let positions: Array<number> = []
         if (selectedPiece) {
-            switch (selectedPiece.type) {
-                case pieceTypes.pawn:
-                    positions = pawnMovementPositions(selectedPiece,nonTakenPieces)
-            }
+            return getMovingPositions(selectedPiece,nonTakenPieces)
         }
-        return positions
     }) || []
 
 
@@ -133,36 +127,59 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
 
 
     return (
-        <div className='chess-board'>
-            {
-                Array.from(Array(64), (e, index) => {
+        <div className='play-area'>
 
-                    // GET PIECE FOR INDEX
-                    const piece = getPieceByIndex(nonTakenPieces, index)
+            <div className="taken-pieces-top">
+                {
+                    TakenWhitePieces.map(piece=>(
+                        <div key={piece.id} className="taken-piece-container">
+                            <Piece type={piece.type} color={piece.color}/>
+                        </div>
+                    ))
+                }
+            </div>
 
-                    return (
+            <div className="taken-pieces-bottom">
+                {
+                    TakenBlackPieces.map(piece=>(
+                        <div key={piece.id} className="taken-piece-container">
+                            <Piece type={piece.type} color={piece.color}/>
+                        </div>
+                    ))
+                }
+            </div>
 
-                        <Square color={getColor(index)}
-                            selected={isSelected(index)}
-                            onClickHandler={() => {
-                                handleSquareClick(index, piece)
-                            }}
-                            key={index}
-                        >
-                            {
-                                piece && !piece.taken ?
-                                    <Piece
-                                        color={piece.color}
-                                        type={piece.type}
-                                        clickHandler={() => {
-                                            setSelectedPiece(piece)
-                                        }} />
-                                    : ""
-                            }
-                        </Square>
-                    )
-                })
-            }
+            <div className='chess-board'>
+                {
+                    Array.from(Array(64), (e, index) => {
+
+                        // GET PIECE FOR INDEX
+                        const piece = getPieceByIndex(nonTakenPieces, index)
+
+                        return (
+
+                            <Square color={getColor(index)}
+                                selected={isSelected(index)}
+                                onClickHandler={() => {
+                                    handleSquareClick(index, piece)
+                                }}
+                                key={index}
+                            >
+                                {
+                                    piece && !piece.taken ?
+                                        <Piece
+                                            color={piece.color}
+                                            type={piece.type}
+                                            clickHandler={() => {
+                                                setSelectedPiece(piece)
+                                            }} />
+                                        : ""
+                                }
+                            </Square>
+                        )
+                    })
+                }
+            </div>
         </div>
     )
 }
