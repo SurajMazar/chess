@@ -166,7 +166,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
                                 key={index}
                             >
                                 {
-                                    piece && !piece.taken ?
+                                    piece?
                                         <Piece
                                             color={piece.color}
                                             type={piece.type}

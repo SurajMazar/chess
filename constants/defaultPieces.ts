@@ -155,6 +155,87 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
         taken:false,
         type:pieceTypes.horse
     },
+
+
+    {
+        id:21,
+        color:colors.black,
+        index:0,
+        taken:false,
+        type:pieceTypes.castle
+    },
+
+    {
+        id:22,
+        color:colors.black,
+        index:7,
+        taken:false,
+        type:pieceTypes.castle
+    },
+
+    {
+        id:23,
+        color:colors.white,
+        index:56,
+        taken:false,
+        type:pieceTypes.castle
+    },
+
+    {
+        id:24,
+        color:colors.white,
+        index:63,
+        taken:false,
+        type:pieceTypes.castle
+    },
+
+    {
+        id:25,
+        color:colors.black,
+        index:2,
+        taken:false,
+        type:pieceTypes.bishop
+    },
+
+    {
+        id:26,
+        color:colors.black,
+        index:5,
+        taken:false,
+        type:pieceTypes.bishop
+    },
+
+    {
+        id:27,
+        color:colors.white,
+        index:58,
+        taken:false,
+        type:pieceTypes.bishop
+    },
+
+    {
+        id:28,
+        color:colors.white,
+        index:61,
+        taken:false,
+        type:pieceTypes.bishop
+    },
+
+    {
+        id:29,
+        color:colors.black,
+        index:4,
+        taken:false,
+        type:pieceTypes.queen
+    },
+
+    {
+        id:30,
+        color:colors.white,
+        index:60,
+        taken:false,
+        type:pieceTypes.queen
+    },
 ]
 
 
