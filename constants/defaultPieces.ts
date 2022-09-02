@@ -122,7 +122,39 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
         index:55,
         taken:false,
         type:pieceTypes.pawn
-    }
+    },
+
+    {
+        id:17,
+        color:colors.white,
+        index:57,
+        taken:false,
+        type:pieceTypes.horse
+    },
+
+    {
+        id:18,
+        color:colors.black,
+        index:1,
+        taken:false,
+        type:pieceTypes.horse
+    },
+
+    {
+        id:19,
+        color:colors.black,
+        index:6,
+        taken:false,
+        type:pieceTypes.horse
+    },
+
+    {
+        id:20,
+        color:colors.white,
+        index:62,
+        taken:false,
+        type:pieceTypes.horse
+    },
 ]
 
 
