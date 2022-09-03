@@ -236,6 +236,22 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
         taken:false,
         type:pieceTypes.queen
     },
+
+    {
+        id:31,
+        color:colors.black,
+        index:3,
+        taken:false,
+        type:pieceTypes.king
+    },
+
+    {
+        id:32,
+        color:colors.white,
+        index:59,
+        taken:false,
+        type:pieceTypes.king
+    },
 ]
 
 

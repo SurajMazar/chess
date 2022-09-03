@@ -6,6 +6,7 @@ import useComputed from '@/hooks/UseComputed'
 import { getMovingPositions } from '@/libs/movements'
 import { getColor } from '@/utils/board.utils'
 import { getPieceByIndex } from '@/utils/piece.util'
+import { playMoveSound, playSelectSound, playTakenSound } from '@/utils/sound.utils'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import Piece from '../Piece'
 import Square from './Square'
@@ -88,6 +89,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
                  */
                 if (piece.color === selectedPiece?.color) {
                     setSelectedPiece(piece)
+                    playMoveSound()
                     return
                 }
 
@@ -105,6 +107,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
                             index
                         }
                     ], 'id')
+                    playTakenSound()
                 }
             }else{
                 if(selectedPiece){
@@ -115,6 +118,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
                         ...selectedPiece,
                         index
                     }, 'id')
+                    playMoveSound()
                 }
             }
             
@@ -172,6 +176,7 @@ const Board: React.FC<PropsWithChildren<{}>> = (props) => {
                                             type={piece.type}
                                             clickHandler={() => {
                                                 setSelectedPiece(piece)
+                                                playSelectSound()
                                             }} />
                                         : ""
                                 }
