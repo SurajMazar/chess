@@ -27,6 +27,7 @@
         .chess-piece{
             height: 70%;
             z-index: 99;
+            pointer-events: none;
         }
     }
 
