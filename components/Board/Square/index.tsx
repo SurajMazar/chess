@@ -1,5 +1,5 @@
 
-import React,{ PropsWithChildren } from 'react'
+import React,{ PropsWithChildren, useEffect, useRef } from 'react'
 import useComputed from '@/hooks/UseComputed'
 import colors, { ColorInterface } from '@/constants/colors';
 
@@ -23,7 +23,7 @@ const Square: React.FC<PropsWithChildren<{
     },[]);
 
     return (
-        <div className={`${className} ${selected?'selected':''}`} onClick={onClickHandler}>
+        <div onDrop={e=>console.log(e)} className={`${className} ${selected?'selected':''}`} onClick={onClickHandler}>
             {children}
         </div>
     )

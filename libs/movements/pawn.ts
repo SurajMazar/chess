@@ -1,5 +1,7 @@
 import colors from "@/constants/colors";
 import defaultPiecesWithPositions, { PiecesListInterface } from "@/constants/defaultPieces";
+import { getSurroundingPositions } from "@/utils/board.utils";
+import { isNumber } from "@/utils/heplers.utils";
 import { getColumnFromPosition, hasPiece, isValidPosition } from "@/utils/piece.util";
 
 export const pawnMovementPositions = (
@@ -12,78 +14,71 @@ export const pawnMovementPositions = (
      */
     let positions:Array<number> = []
 
-    /**
+
+     /**
      * IS FIRST MOVE
      */
-    const isFirstMove = () => {
+      const isFirstMove = () => {
         const piece = defaultPiecesWithPositions.find(piece => piece.id === selectedPiece.id)!
         return piece?.index === selectedPiece.index
     }
 
     /**
-     * CHECK IF ROW DIFFERENCE IS VALID
-     * @param position 
+     * SURROUNDING POSITIONS
      */
-    const validColDifference = (position:number) => {
-        return Math.abs(getColumnFromPosition(selectedPiece.index)-getColumnFromPosition(position)) < 2
+    const surroundings = getSurroundingPositions(selectedPiece.index);
+
+    /**
+     * 
+     * @param position 
+     * @param enemy 
+     */
+    const addPosition = (position:number|undefined|false,enemy:boolean = false) => {
+        if((position || position === 0) && isValidPosition(position)){
+            const piece = hasPiece(position ,currentPiecesWithPositions)
+          if(enemy){
+            if(piece && (piece?.color !== selectedPiece.color)){
+                positions.push(position)
+            }
+          }else{
+            if(!piece){
+                positions.push(position);
+                firstMoveAcception(position)
+            }
+          } 
+        }
     }
 
     /**
-     * ADD AVAILABLE POSITIONS
+     * FIRST MOVE EXCEPTION
+     * @param position 
      */
-    const addPostion = (position:number, enemy:boolean = false) => {
-        if(isValidPosition(position) && validColDifference(position)){
-            if(!enemy){
-                const piece = hasPiece(position,currentPiecesWithPositions)
-                if(!piece){
-                    positions.push(position)
+    const firstMoveAcception = (position:number)=>{
+        if(isFirstMove()){
+            const surroundingsPos = getSurroundingPositions(position)
+            if(selectedPiece.color === colors.white){
+                if(
+                    (surroundingsPos.top && isNumber(surroundingsPos.top)) 
+                    && !hasPiece(surroundingsPos?.top,currentPiecesWithPositions)){
+                    positions.push(surroundingsPos.top)
                 }
             }else{
-                const piece = hasPiece(position,currentPiecesWithPositions)
-                if(piece && piece.color !== selectedPiece.color){
-                    positions.push(position)
+                if((surroundingsPos.bottom && isNumber(surroundingsPos.bottom)) 
+                    && !hasPiece(surroundingsPos?.bottom,currentPiecesWithPositions)){
+                    positions.push(surroundingsPos.bottom)
                 }
-            }
+            } 
         }
     }
-
-
-    const calculatePosition = (type:'forward'|'backward')=>{
-
-        if(type === "forward"){
-            addPostion(selectedPiece.index - 8)
-            addPostion(selectedPiece.index - 7,true)
-            addPostion(selectedPiece.index - 9,true)
-            if(isFirstMove()){
-                addPostion(selectedPiece.index - 16)   
-            }
-        }else{
-            addPostion(selectedPiece.index + 8)
-            addPostion(selectedPiece.index + 7,true)
-            addPostion(selectedPiece.index + 9,true)
-
-             if(isFirstMove()){
-                addPostion(selectedPiece.index + 16)   
-            }
-        }
-
-    }
-
-
+    
     if(selectedPiece.color === colors.black){
-
-        if(reversed){
-            calculatePosition('forward')
-        }else{
-            calculatePosition('backward')
-        }
-
+        addPosition(surroundings?.bottom)
+        addPosition(surroundings?.bottomLeft,true)
+        addPosition(surroundings?.bottomRight,true)
     }else{
-        if(reversed){
-            calculatePosition('backward')
-        }else{
-            calculatePosition('forward')
-        }
+        addPosition(surroundings?.top)
+        addPosition(surroundings?.topLeft,true)
+        addPosition(surroundings?.topRight,true)
     }
 
     return positions;

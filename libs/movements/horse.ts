@@ -21,7 +21,7 @@ export const horseMovementPositions = (
      * @param position ADD POSITION IF EXISTS
      */
     function addPosition(position:number | undefined | false){
-        if(position){
+        if(position || position === 0){
             const positionPiece = hasPiece(position,currentPiecesWithPositions)
 
             if(!positionPiece){
