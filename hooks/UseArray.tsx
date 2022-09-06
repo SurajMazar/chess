@@ -47,7 +47,6 @@ const useArrayObj = <T extends object> (array:Array<T>) => {
              * OLD OBJECT INDEX
              */
             const oldObjectIndex = data.findIndex(dataItem => item[key] === dataItem[key])
-            console.log(oldObjectIndex);
 
             /**
              * IF IS A VALID INDEX

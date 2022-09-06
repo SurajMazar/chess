@@ -107,8 +107,8 @@ const ChessBoardProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
             /**
              * CORRECTION FACTOR FOR RIGHT DIRECTION
              */
-            if(castelingPieceDir === 'right'){
-                castlingPieceIndex = castlingPieceIndex +1;
+            if(castelingPieceDir === 'left'){
+                castlingPieceIndex = castlingPieceIndex - 1
             }
             const castelingPiece = hasPiece(castlingPieceIndex, nonTakenPieces)
             if (castelingPiece && castelingPiece.type === pieceTypes.castle) {

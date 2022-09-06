@@ -7,7 +7,7 @@ import { getRowFromPosition, isValidPosition } from "./piece.util";
  */
 export const getColor = (index:number) => {
     const row = getRowFromPosition(index);
-    if(row%2 === 0){
+    if(row%2 !== 0){
         return index%2 === 0 ? colors.white : colors.black
     }else{
         return index%2 === 0 ? colors.black : colors.white
