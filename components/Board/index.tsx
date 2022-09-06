@@ -44,6 +44,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                                 {
                                     piece?
                                         <Piece
+                                            identifier={piece.id}
                                             clickHandler={() => {
                                                 handleSquareClick(index, piece)
                                             }}
@@ -62,7 +63,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                 {
                     TakenWhitePieces.map(piece=>(
                         <div key={piece.id} className="taken-piece-container">
-                            <Piece type={piece.type} color={piece.color}/>
+                            <Piece type={piece.type} color={piece.color} identifier={piece.id}/>
                         </div>
                     ))
                 }
@@ -73,7 +74,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                 {
                     TakenBlackPieces.map(piece=>(
                         <div key={piece.id} className="taken-piece-container">
-                            <Piece type={piece.type} color={piece.color}/>
+                            <Piece type={piece.type} color={piece.color} identifier={piece.id}/>
                         </div>
                     ))
                 }

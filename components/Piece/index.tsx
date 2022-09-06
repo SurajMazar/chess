@@ -7,20 +7,20 @@ import React,{ PropsWithChildren, useState } from 'react'
 const Piece: React.FC<PropsWithChildren<{
     type:pieceTypeInterface,
     color:ColorInterface,
-    clickHandler?:()=>void
+    clickHandler?:()=>void,
+    identifier:number
 }>>  = (props) => {
 
     /**
      * COMPONENT PROPS
      */
-    const {type,color,clickHandler} = props
+    const {type,color,clickHandler, identifier} = props
 
 
     /**
      * COMPONENT STATE
      */
     const [isDragging, setDragging] = useState(false);
-
 
     /**
      * PIECE IMAGE
@@ -29,22 +29,37 @@ const Piece: React.FC<PropsWithChildren<{
 
     return (
         <div  className='chess-piece-wrapper'>
-            <img src={pieceImage} alt={type} className={`"chess-piece" ${isDragging?'piece-dragging':''}`} 
+
+            <div className={`chess-piece`} 
                 draggable={true}
+
                 onDragStart={()=>{
                     setDragging(true)
                     if(clickHandler){
                         clickHandler()
                     }
                 }}
+
                 onDragEnd={()=>{
                     setDragging(false)
                 }}
 
                 onDragLeave={()=>{
                     setDragging(false)
-                }}
-            />
+                    const piece = document.getElementById(`piece-${identifier}`)!
+                }}  
+
+            >
+                <div  
+                    style={{
+                        backgroundImage:`url(${pieceImage})`,
+                        height:'50px',
+                        width:'50px',
+                        backgroundRepeat:'no-repeat',
+                        backgroundPosition:'center'
+                    }}>
+                </div>
+            </div>
         </div>
     )
 }
