@@ -3,6 +3,7 @@ import pieceTypes from '@/constants/pieceTypes'
 import { getBishopMovement } from './bishop'
 import { getCastleMovement } from './castle'
 import { horseMovementPositions } from './horse'
+import { getKingMovement } from './king'
 import { pawnMovementPositions } from './pawn'
 import { getQueenMovement } from './queen'
 
@@ -13,7 +14,7 @@ export {pawnMovementPositions} from './pawn'
  * @param piece 
  * @param piecesList 
  */
-export const getMovingPositions = (piece:PiecesListInterface, piecesList:Array<PiecesListInterface>) => {
+export const getMovingPositions = (piece:PiecesListInterface, piecesList:Array<PiecesListInterface>, isValidCastling:boolean = true) => {
     switch (piece.type) {
         case pieceTypes.pawn:
             return pawnMovementPositions(piece,piecesList)
@@ -25,6 +26,8 @@ export const getMovingPositions = (piece:PiecesListInterface, piecesList:Array<P
             return getBishopMovement(piece,piecesList)
         case pieceTypes.queen:
             return getQueenMovement(piece,piecesList)
+        case pieceTypes.king:
+            return getKingMovement(piece,piecesList,isValidCastling)
         default:
             return []
     }
