@@ -1,5 +1,6 @@
 .play-area{
     position: relative;
+    display:flex;
 .chess-board {
     width:640px;
     display:flex;
@@ -24,13 +25,14 @@
         justify-content: center;
         align-items: center;
         cursor:pointer;
-        .chess-piece{
+        img{
             height: 70%;
             z-index: 99;
             user-select: none;
         }
     }
 
+    
     .selected{
         position:relative;
         cursor: pointer;
@@ -44,19 +46,37 @@
             background-color: rgba(255, 215, 0,0.31);
         }
     }
+
+    .select-danger{
+        position:relative;
+        cursor: pointer;
+        &::after{
+            content:'';
+            position: absolute;
+            top:0;
+            left:0;
+            height: 100%;
+            width:100%;
+            background-color: rgba(255, 42, 0, 0.31);
+        }
+    }
     
 }
 
     .taken-pieces-top {
-        position: absolute;
-        top:5%;
-        right:-80px;
+        margin:10px;
+        display: flex;
+        flex-wrap: wrap;
+        max-height: 680px; 
+        flex-direction: column;
     }
 
     .taken-pieces-bottom {
-        position: absolute;
-        bottom:5%;
-        right:-80px;
+        margin:10px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        max-height: 680px; 
     }
 
     .taken-piece-container{
@@ -69,10 +89,16 @@
             justify-content: center;
             align-items: center;
             cursor:pointer;
-            .chess-piece{
+            img{
                 height: 70%;
                 z-index: 99;
             }
         }
     }
+}
+
+
+
+.piece-dragging{
+    opacity: 0 !important;
 }

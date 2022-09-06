@@ -254,5 +254,20 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
     },
 ]
 
+/**
+ * CASTELING POSITION LEFT
+ */
+export const castlingPositionsRight = [5,61]
+
+/**
+ * CASTELING POSITION RIGHT
+ */
+export const castelingPositionLeft = [1,57]
+
+/**
+ * CASTELING POSITIONS
+ */
+export const castelingPositions = [...castelingPositionLeft,...castlingPositionsRight]
+
 
 export default defaultPiecesWithPositions

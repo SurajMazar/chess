@@ -1,7 +1,6 @@
 import { ChessBoardContext } from '@/context/ChessBoardContext'
 import { getColor } from '@/utils/board.utils'
 import { getPieceByIndex } from '@/utils/piece.util'
-import { playSelectSound } from '@/utils/sound.utils'
 import React, { PropsWithChildren, useContext } from 'react'
 import Piece from '../Piece'
 import Square from './Square'
@@ -17,12 +16,47 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
         handleSquareClick,
         isSelected,
         nonTakenPieces,
-        setSelectedPiece
      } = useContext(ChessBoardContext)
 
 
     return (
         <div className='play-area'>
+
+           
+            <div className='chess-board'>
+                {
+                    Array.from(Array(64), (e, index) => {
+
+                        // GET PIECE FOR INDEX
+                        const piece = getPieceByIndex(nonTakenPieces, index)
+
+                        return (
+
+                            <Square 
+                                position={index}
+                                color={getColor(index)}
+                                selected={isSelected(index)}
+                                onClickHandler={() => {
+                                    handleSquareClick(index, piece)
+                                }}
+                                key={index}
+                            >
+                                {
+                                    piece?
+                                        <Piece
+                                            clickHandler={() => {
+                                                handleSquareClick(index, piece)
+                                            }}
+                                            color={piece.color}
+                                            type={piece.type} />
+                                        : ""
+                                }
+                            </Square>
+                        )
+                    })
+                }
+            </div>
+
 
             <div className="taken-pieces-top">
                 {
@@ -34,6 +68,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                 }
             </div>
 
+
             <div className="taken-pieces-bottom">
                 {
                     TakenBlackPieces.map(piece=>(
@@ -41,35 +76,6 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                             <Piece type={piece.type} color={piece.color}/>
                         </div>
                     ))
-                }
-            </div>
-
-            <div className='chess-board'>
-                {
-                    Array.from(Array(64), (e, index) => {
-
-                        // GET PIECE FOR INDEX
-                        const piece = getPieceByIndex(nonTakenPieces, index)
-
-                        return (
-
-                            <Square color={getColor(index)}
-                                selected={isSelected(index)}
-                                onClickHandler={() => {
-                                    handleSquareClick(index, piece)
-                                }}
-                                key={index}
-                            >
-                                {
-                                    piece?
-                                        <Piece
-                                            color={piece.color}
-                                            type={piece.type} />
-                                        : ""
-                                }
-                            </Square>
-                        )
-                    })
                 }
             </div>
         </div>

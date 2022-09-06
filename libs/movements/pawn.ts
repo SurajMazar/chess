@@ -1,8 +1,7 @@
 import colors from "@/constants/colors";
 import defaultPiecesWithPositions, { PiecesListInterface } from "@/constants/defaultPieces";
 import { getSurroundingPositions } from "@/utils/board.utils";
-import { isNumber } from "@/utils/heplers.utils";
-import { getColumnFromPosition, hasPiece, isValidPosition } from "@/utils/piece.util";
+import { hasPiece, isValidPosition } from "@/utils/piece.util";
 
 export const pawnMovementPositions = (
     selectedPiece:PiecesListInterface,
@@ -58,12 +57,12 @@ export const pawnMovementPositions = (
             const surroundingsPos = getSurroundingPositions(position)
             if(selectedPiece.color === colors.white){
                 if(
-                    (surroundingsPos.top && isNumber(surroundingsPos.top)) 
+                    (surroundingsPos.top || surroundingsPos.top === 0) 
                     && !hasPiece(surroundingsPos?.top,currentPiecesWithPositions)){
                     positions.push(surroundingsPos.top)
                 }
             }else{
-                if((surroundingsPos.bottom && isNumber(surroundingsPos.bottom)) 
+                if((surroundingsPos.bottom || surroundingsPos.bottom === 0) 
                     && !hasPiece(surroundingsPos?.bottom,currentPiecesWithPositions)){
                     positions.push(surroundingsPos.bottom)
                 }

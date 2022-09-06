@@ -4,11 +4,11 @@ import Board from '../components/Board'
 
 const Home: NextPage = () => {
   return (
-    <ChessBoardProvider>
-      <div className='game-container'>
-        <Board/>
-      </div>
-    </ChessBoardProvider>
+      <ChessBoardProvider>
+          <div className='game-container'>
+              <Board/>
+          </div>
+      </ChessBoardProvider>
   )
 }
 
