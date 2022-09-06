@@ -224,7 +224,7 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
     {
         id:29,
         color:colors.black,
-        index:4,
+        index:3,
         taken:false,
         type:pieceTypes.queen
     },
@@ -232,7 +232,7 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
     {
         id:30,
         color:colors.white,
-        index:60,
+        index:59,
         taken:false,
         type:pieceTypes.queen
     },
@@ -240,7 +240,7 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
     {
         id:31,
         color:colors.black,
-        index:3,
+        index:4,
         taken:false,
         type:pieceTypes.king
     },
@@ -248,7 +248,7 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
     {
         id:32,
         color:colors.white,
-        index:59,
+        index:60,
         taken:false,
         type:pieceTypes.king
     },
@@ -257,12 +257,12 @@ const defaultPiecesWithPositions:Array<PiecesListInterface> = [
 /**
  * CASTELING POSITION LEFT
  */
-export const castlingPositionsRight = [5,61]
+export const castlingPositionsRight = [6,62]
 
 /**
  * CASTELING POSITION RIGHT
  */
-export const castelingPositionLeft = [1,57]
+export const castelingPositionLeft = [2,58]
 
 /**
  * CASTELING POSITIONS
