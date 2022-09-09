@@ -4,18 +4,20 @@ import useComputed from '@/hooks/UseComputed'
 import colors, { ColorInterface } from '@/constants/colors';
 import pieceTypes from '@/constants/pieceTypes';
 import { ChessBoardContext } from '@/context/ChessBoardContext';
+import { PiecesListInterface } from '@/constants/defaultPieces';
 
 const Square: React.FC<PropsWithChildren<{
     color:ColorInterface,
     selected?:boolean,
     onClickHandler:()=>void,
-    position:number
+    position:number,
+    piece?:PiecesListInterface
 }>>  = (props) => {
 
     /**
      * COMPONENT PROPS
      */
-    const {children, color,selected, onClickHandler, position} = props
+    const {children, color,selected, onClickHandler, position, piece} = props
 
     /**
      * CHESS BOARD CONTEXT
@@ -30,7 +32,7 @@ const Square: React.FC<PropsWithChildren<{
     /**
      * HANDLE DROP
      */
-    const handleDrop = useCallback(() => {        
+    const handleDrop = useCallback(() => {                       
         onClickHandler()
         setDragOver(false)
     },[onClickHandler])
@@ -62,6 +64,7 @@ const Square: React.FC<PropsWithChildren<{
 
     return (
         <div 
+        onDrop={handleDrop}   
         onDragOver={(event)=>{
             event.preventDefault()
             setDragOver(true)
@@ -70,10 +73,13 @@ const Square: React.FC<PropsWithChildren<{
         onDragLeave= {()=>{
             setDragOver(false)
         }}
-        
-        onDrop={handleDrop}   
+        style={{position:'relative'}}
         className={`${className} ${selected?'selected':''} ${getDragOverClass}`} onClick={onClickHandler}>
-            {children}
+            {
+                isDragOver && piece && piece.color !== selectedPiece?.color ?
+                '': children
+            }
+            <div className="overlay"></div>
         </div>
     )
 }

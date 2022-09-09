@@ -1,4 +1,4 @@
-import colors, { ColorInterface } from "@/constants/colors";
+import colors from "@/constants/colors";
 import defaultPiecesWithPositions, { castelingPositionLeft, castelingPositions, PiecesListInterface } from "@/constants/defaultPieces";
 import pieceTypes from "@/constants/pieceTypes";
 import useArrayObj from "@/hooks/UseArray";
@@ -20,7 +20,9 @@ interface ChessBoardContextInterface {
     availablePositions: Array<number>,
     nonTakenPieces: Array<PiecesListInterface>,
     TakenBlackPieces: Array<PiecesListInterface>,
-    TakenWhitePieces: Array<PiecesListInterface>
+    TakenWhitePieces: Array<PiecesListInterface>,
+    turn:boolean,
+    handleMouseMove:(event:React.MouseEvent<HTMLDivElement, MouseEvent>, isDragging:boolean, movingPieceRef:any)=>void,
 }
 
 /**
@@ -214,9 +216,30 @@ const ChessBoardProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         setTurn(!turn)
     }, [chessPieces]) //eslint-disable-line
 
+    /**
+     * HANDLE MOUSE MOVEMENT ON THE BOARD
+     */
+    const handleMouseMove = (event:React.MouseEvent<HTMLDivElement, MouseEvent>, isDragging:boolean, movingPieceRef:any) => {  
+        if(selectedPiece && isDragging){
+
+            const mousePosition = {
+                x: event.clientX,
+                y: event.clientY
+            }                
+
+            if(movingPieceRef?.current){
+                movingPieceRef.current.style.position = 'fixed'
+                movingPieceRef.current.style.top = (mousePosition.y) + 'px'
+                movingPieceRef.current.style.left =( mousePosition.x)+ 'px'
+                movingPieceRef.current.style.zIndex = '9'
+            }
+        }
+    }
+
     return (
         <>
             <ChessBoardContext.Provider value={{
+                turn,
                 selectedPiece,
                 setSelectedPiece,
                 handleSquareClick,
@@ -224,7 +247,8 @@ const ChessBoardProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
                 availablePositions,
                 nonTakenPieces,
                 TakenBlackPieces,
-                TakenWhitePieces
+                TakenWhitePieces,
+                handleMouseMove,
             }}>
                 {children}
             </ChessBoardContext.Provider>
