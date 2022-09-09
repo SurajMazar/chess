@@ -1,11 +1,11 @@
 import colors from "@/constants/colors";
-import defaultPiecesWithPositions, { castelingPositionLeft, castelingPositions, PiecesListInterface } from "@/constants/defaultPieces";
+import defaultPiecesWithPositions, { castelingPositionLeft, castelingPositions, castlingPositionsRight, PiecesListInterface } from "@/constants/defaultPieces";
 import pieceTypes from "@/constants/pieceTypes";
 import useArrayObj from "@/hooks/UseArray";
 import useComputed from "@/hooks/UseComputed";
 import { getMovingPositions } from "@/libs/movements";
 import { getSurroundingPositions } from "@/utils/board.utils";
-import { hasPiece } from "@/utils/piece.util";
+import { getColumnFromPosition, hasPiece } from "@/utils/piece.util";
 import { playMoveSound, playSelectSound, playTakenSound } from "@/utils/sound.utils";
 import { createContext, Dispatch, PropsWithChildren, SetStateAction, useEffect, useState } from "react";
 
@@ -95,6 +95,17 @@ const ChessBoardProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     }
 
     /**
+     * Is a castling move
+     * @param index 
+     * @returns 
+     */
+    const isCastlingMove = (index:number,piece:PiecesListInterface) => {
+       const indexCol =  getColumnFromPosition(index)
+       const pieceCol = getColumnFromPosition(piece.index)
+       return Math.abs(pieceCol - indexCol) > 1
+    }
+
+    /**
      * HANDLE CASTLING
      * @param position 
      */
@@ -172,7 +183,7 @@ const ChessBoardProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
                     playTakenSound()
                 }
-            } else if (castelingPositions.includes(index) && selectedPiece && selectedPiece.type === pieceTypes.king){
+            } else if (castelingPositions.includes(index) && selectedPiece && selectedPiece.type === pieceTypes.king && isCastlingMove(index,selectedPiece)){                
                 handleCastlingMove(index, selectedPiece)
                 playMoveSound()
             } else {
