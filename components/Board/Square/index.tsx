@@ -76,7 +76,7 @@ const Square: React.FC<PropsWithChildren<{
         style={{position:'relative'}}
         className={`${className} ${selected?'selected':''} ${getDragOverClass}`} onClick={onClickHandler}>
             {
-                isDragOver && piece && piece.color !== selectedPiece?.color ?
+                isDragOver && piece && piece.color !== selectedPiece?.color && availablePositions.includes(position) ?
                 '': children
             }
             <div className="overlay"></div>
