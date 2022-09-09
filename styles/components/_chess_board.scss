@@ -27,7 +27,7 @@
         cursor:pointer;
         .chess-piece{
             height: 70%;
-            z-index: 99;
+            z-index: 999;
             user-select: none;
         }
     }
@@ -36,6 +36,14 @@
     .selected{
         position:relative;
         cursor: pointer;
+        .overlay{
+            position: absolute;
+            top:0;
+            left:0;
+            height: 100%;
+            width:100%;
+            background-color: rgba(255, 215, 0,0.31);
+        }
         &::after{
             content:'';
             position: absolute;
@@ -43,7 +51,7 @@
             left:0;
             height: 100%;
             width:100%;
-            background-color: rgba(255, 215, 0,0.31);
+            z-index: 99;
         }
     }
 
@@ -98,7 +106,15 @@
 }
 
 
-
+//HIDE THE PIECE WHILE DRAGGING
 .piece-dragging{
     opacity: 0 !important;
+}
+
+// PIECE THAT MOVES WITH THE CURSOR WHILE DRAGGING
+.movingPiece{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
 }

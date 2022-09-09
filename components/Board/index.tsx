@@ -23,7 +23,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
         <div className='play-area'>
 
            
-            <div className='chess-board'>
+            <div className='chess-board' id="chess-board">
                 {
                     Array.from(Array(64), (e, index) => {
 
@@ -40,6 +40,7 @@ const Board: React.FC<PropsWithChildren<{}>> = () => {
                                     handleSquareClick(index, piece)
                                 }}
                                 key={index}
+                                piece={piece}
                             >
                                 {
                                     piece?
