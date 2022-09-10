@@ -79,7 +79,14 @@ const Square: React.FC<PropsWithChildren<{
                 isDragOver && piece && piece.color !== selectedPiece?.color && availablePositions.includes(position) ?
                 '': children
             }
-            <div className="overlay"></div>
+            <div className="overlay">
+                {
+                    !piece?
+                    <div className="dot"></div>:
+                    selectedPiece?.id === piece?.id ?
+                    '': <div className="takable"></div>
+                }
+            </div>
         </div>
     )
 }
